@@ -7,14 +7,9 @@ const userSchema = new Schema(
       enum: ['USER', 'ADMIN', 'TEACHER'],
       default: 'USER'
     },
-    firstName: {
+    username: {
       type: String,
       required: [true, 'Indica tu nombre'],
-      trim: true
-    },
-    lastName: {
-      type: String,
-      required: [true, 'Indica tu apellido'],
       trim: true
     },
     email: {
