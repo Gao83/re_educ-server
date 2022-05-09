@@ -20,12 +20,12 @@ const CourseSchema = new Schema(
             required: [true, 'Indica la descripción del curso'],
         },
         requirements: {
-            type: String,
+            type: [String],
             required: [true, 'Indica la requerimientos necesarios para el curso'],
         },
         content: {
             type: String,
-            required: [true, 'Indica la contenido del el curso'],
+            required: [true, 'Indica el contenido del curso'],
         },
         duration: {
             type: String,
@@ -40,37 +40,22 @@ const CourseSchema = new Schema(
         },
         price: {
             type: Number,
-            default: 0,
-            required: [true, 'Indica el precio del curso'],
+            default: null
         },
         price_detail: {
             currency: {
                 type: String,
                 enum: ["EUR", "USD"]
             },
-            currency_symbol: {
-                type: String,
-                enum: ["€", "$"]
-            }
         },
         category: {
             type: String,
             required: [true, 'Indica una categoria'],
-            enum: ["1", "2", "3", "4", "5"]
+            enum: ["Tecnología", "Diseño", "Marketing", "Informática y software", "Música", "Salud y fitness", "Otros"]
         },
-        createdBy: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        image: {
-            type: String,
-        },
-        url: [String],
+        urls: [String],
         payment: {
             type: String,  //no tenemos ni pi
-        },
-        rating: {
-            type: Number
         }
 
     },
@@ -79,7 +64,7 @@ const CourseSchema = new Schema(
     }
 )
 
-const Course = model("Course", courseSchema)
+const Course = model("Course", CourseSchema)
 
 module.exports = Course
 
