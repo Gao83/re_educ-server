@@ -80,39 +80,39 @@
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|GET     |  api/users/students:id   |  Detalles de un estudiante              |
+|GET     |  api/profile/students:id   |  Detalles de un estudiante              |
 
 ## Edit each Student
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|POST    |  api/users/students/edit/:id   |  Edición de un estudiante         |
+|PUT    |  api/profile/students/edit/:id   |  Edición de un estudiante         |
 
 ## List of Teachers
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|GET     |  api/users/teachers  |  Listado de profesores                     |
+|GET     |  api/profile/teachers  |  Listado de profesores                     |
 
 
 ## Details of each Teeacher
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|GET     |  api/users/teachers/:id   |  Detalles de un profesor/a         |
+|GET     |  api/profile/teachers/:id   |  Detalles de un profesor/a         |
 
 ## Edit each Student
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|PUT    |  api/users/teachers/edit/:id   |  Edición de un profesor/a           |
+|PUT    |  api/profile/teachers/edit/:id   |  Edición de un profesor/a           |
 
 
 ## Delete each User (student/teacher)
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|DELETE  |  api/users/delete/:id  |  Borrar  un usuario/a                     |
+|DELETE  |  api/profile/delete/:id  |  Borrar  un usuario/a                     |
 
 
 

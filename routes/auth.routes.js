@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const User = require("../models/User.model")
 const saltRounds = 10
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
+
 router.post('/register', (req, res, next) => {
     const { role, username, email, password } = req.body
     if (password.length < 2) {
@@ -19,7 +20,7 @@ router.post('/register', (req, res, next) => {
             }
             const salt = bcrypt.genSaltSync(saltRounds)
             const hashedPassword = bcrypt.hashSync(password, salt)
-            return User.create({ role, username, email, password })
+            return User.create({ role, username, email, password: hashedPassword })
         })
         .then((createdUser) => {
             const { role, username, email, password } = createdUser
@@ -31,6 +32,7 @@ router.post('/register', (req, res, next) => {
             res.status(500).json({ message: "Internal Server Error" })
         })
 })
+
 router.post('/login', (req, res, next) => {
     const { email, password } = req.body
     if (email === '' || password === '') {
@@ -63,6 +65,7 @@ router.post('/login', (req, res, next) => {
             res.status(500).json({ message: "Internal Server Error" })
         })
 })
+
 router.get('/verify', isAuthenticated, (req, res, next) => {
     res.status(200).json(req.payload)
 })
