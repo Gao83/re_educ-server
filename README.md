@@ -22,7 +22,7 @@
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-| GET   | api/auth/verify         |  Formulario de verificación de sesión    |
+| GET   | api/auth/verify         |  Formulario de verificación de sesión     |
 
 
 # Courses
@@ -31,7 +31,7 @@
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|GET     |  api/courses/allCourses            |  Listado de cursos            |
+|GET     |  api/courses/:search            |  Listado de cursos            |
 
 ## Details of each course
 
@@ -50,20 +50,20 @@
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|POST    |  api/courses/edit/:id   |  Edición de un curso                     |
+|PUT    |  api/courses/edit/:id   |  Edición de un curso                     |
 
 
 ## Notes of each course
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|POST    |  api/courses/note/:id   |  Notas sobre un curso                     |
+|POST    |  api/courses/note/:id   |  Notas sobre un curso                    |
 
 ## Delete each course
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|POST    |  api/courses/delete/:id  |  Borrar  un curso                       |
+|DELETE    |  api/courses/delete/:id  |  Borrar  un curso                     |
 
 
 
@@ -86,13 +86,13 @@
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|POST    |  api/users/students/edit/:id   |  Edición de un estudiante                     |
+|POST    |  api/users/students/edit/:id   |  Edición de un estudiante         |
 
 ## List of Teachers
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|GET     |  api/users/teachers  |  Listado de profesores                  |
+|GET     |  api/users/teachers  |  Listado de profesores                     |
 
 
 ## Details of each Teeacher
@@ -105,14 +105,14 @@
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|POST    |  api/users/teachers/edit/:id   |  Edición de un profesor/a                 |
+|PUT    |  api/users/teachers/edit/:id   |  Edición de un profesor/a           |
 
 
 ## Delete each User (student/teacher)
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|POST    |  api/users/delete/:id  |  Borrar  un usuario/a                     |
+|DELETE  |  api/users/delete/:id  |  Borrar  un usuario/a                     |
 
 
 
