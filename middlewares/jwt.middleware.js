@@ -8,16 +8,11 @@ const isAuthenticated = expressjwt({
 })
 
 function getTokenFromHeaders(req) {
-
     if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
-
         const token = req.headers.authorization.split(" ")[1]
-
         console.log('EXTRAYENDO DESDE EL MIDDLEWARE EL TOKEN ----- ', token)
-
         return token
     }
-
     return null
 }
 

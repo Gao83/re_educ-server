@@ -1,11 +1,10 @@
 const { Schema, model } = require("mongoose");
 
-const commentSchema = new Schema(
+const ratingSchema = new Schema(
     {
         image: String,
         content: String,
         rating: Number,
-        date: Date,
         likes: Number,
         owner: {
             type: Schema.Types.ObjectId,
@@ -32,7 +31,7 @@ const commentSchema = new Schema(
 )
 
 
-module.exports = model("Comment", commentSchema)
+const Rating = model("Rating", ratingSchema)
 
-module.exports = Comment
+module.exports = Rating
 

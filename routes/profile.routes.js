@@ -10,9 +10,6 @@ router.get("/list", (req, res) => {
 })
 
 
-
-
-
 router.get("/teacher", (req, res) => {
 
     User
