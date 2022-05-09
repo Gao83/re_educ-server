@@ -9,7 +9,7 @@
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-| POST |  api/auth/register         |  Formulario de registro                         |
+| POST |  api/auth/register         |  Formulario de registro                 |
 
 ## Login
 
@@ -37,7 +37,7 @@
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|GET     |  api/courses/details/:id   |  Detalles de un curso              |
+|GET     |  api/courses/details/:id   |  Detalles de un curso                 |
 
 
 ## Create each course
