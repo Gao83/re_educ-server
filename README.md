@@ -73,7 +73,7 @@
 
 | METHOD |        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
-|GET     |  api/users/students  |  Listado de estudiantes                  |
+|GET     |  api/profile/students  |  Listado de estudiantes                  |
 
 
 ## Details of each Student
