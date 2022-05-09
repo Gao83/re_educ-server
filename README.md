@@ -29,16 +29,16 @@
 
 ## List of Courses
 
-| METHOD |        URL       |                 DESCRIPTION                     |
+| METHOD |ION                     |
+|--------|------------------|-------------------------------------------------|
+|GET     |  api/courses/details/:id   |  Detalles de un curso                 |
+        URL       |                 DESCRIPTION                     |
 |--------|------------------|-------------------------------------------------|
 |GET     |  api/courses/:search            |  Listado de cursos            |
 
 ## Details of each course
 
-| METHOD |        URL       |                 DESCRIPTION                     |
-|--------|------------------|-------------------------------------------------|
-|GET     |  api/courses/details/:id   |  Detalles de un curso                 |
-
+| METHOD |        URL       |                 DESCRIPT
 
 ## Create each course
 
