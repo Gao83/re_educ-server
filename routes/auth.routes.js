@@ -39,42 +39,6 @@ router.post('/register', (req, res, next) => {
         })
 })
 
-// router.post('/login', (req, res, next) => {
-
-//     const { email, password } = req.body
-
-//     if (email === '' || password === '') {
-//         res.status(400).json({ message: "Indica email y contraseña." });
-//         return;
-//     }
-
-//     User
-
-//         .findOne({ email })
-//         .then((foundUser) => {
-
-//         //     if (!foundUser) {
-//         //         res.status(401).json({ message: "Usuario no encontrado" })
-//         //         return;
-//         //     }
-
-//         //     if (bcrypt.compareSync(password, foundUser.password)) {
-
-//         //         const { _id, email, username } = foundUser
-
-//         //         const payload = { _id, email, username }
-
-//         //         const authToken = jwt.sign(
-//         //             payload,
-//         //             process.env.TOKEN_SECRET,
-//         //             { algorithm: 'HS256', expiresIn: "6h" }
-//         //         )
-
-//         //         res.status(200).json({ authToken });
-//         //     }
-//         //     else {
-//         //         res.status(401).json({ message: "No se ha podido autentificar al usuario" });
-//         //     }
 
 router.get('/verify', isAuthenticated, (req, res, next) => {
     res.status(200).json(req.payload)
