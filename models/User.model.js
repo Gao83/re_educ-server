@@ -26,11 +26,6 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'Indica tu contraseña']
-    },
-    birthDate: {
-      type: Date,
-      required: [true, 'Indica tu fecha de nacimiento']
     },
     profileImg: {
       type: String,
@@ -39,21 +34,17 @@ const userSchema = new Schema(
     interests: {
       type: [String]
     },
-    // education: {
-    //   type: [String],
-    //   enum: ["1", "2", "3", "4", "5"]
-    // },
-    // specialization: {
-    //   type: [String],
-    //   enum: ["1", "2", "3", "4", "5"]
-    // },
-    aboutMe: {
+    education: {
       type: String,
+      enum: ["Bachillerato", "Formación Profesional", "Grado Universitario", "Enseñanzas de régimen especial", "Otros"]
     },
-    course: {
-      type: Schema.Types.ObjectId,
-      ref: 'Course'
-    },
+    aboutMe: String,
+    courses: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Course'
+      }
+    ],
   },
   {
     timestamps: true,

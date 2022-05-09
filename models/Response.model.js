@@ -2,16 +2,12 @@ const { Schema, model } = require("mongoose");
 
 const responseSchema = new Schema(
     {
-        image: {
-            type: String,
-        },
+        image: String,
         content: {
             type: String,
+            required: true
         },
-        likes: {
-            type: Number,
-        },
-        creator: {
+        owner: {
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
@@ -20,6 +16,6 @@ const responseSchema = new Schema(
         timestamps: true,
     }
 )
-const Response = model("Response", userSchema)
+const Response = model("Response", responseSchema)
 
 module.exports = Response
