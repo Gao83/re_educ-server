@@ -5,7 +5,7 @@ const CourseSchema = new Schema(
         title: {
             type: String,
             required: [true, 'Indica el nombre del curso'],
-            unique: true,
+            unique: [true, 'El nombre del curso ya existe'],
         },
         courseImg: {
             type: String,
@@ -30,9 +30,6 @@ const CourseSchema = new Schema(
         duration: {
             type: String,
             required: [true, 'Indica la duración del curso'],
-        },
-        date: {
-            type: Date,
         },
         isPaid: {
             type: Boolean,
