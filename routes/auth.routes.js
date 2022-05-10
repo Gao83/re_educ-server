@@ -6,11 +6,23 @@ const saltRounds = 10
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
 
 router.post('/register', (req, res, next) => {
-    const { role, username, email, password } = req.body
-    if (password.length < 2) {
-        res.status(400).json({ message: 'Password must have at least 3 characters' })
+
+    if (email === '' || password === '' || username === '') {
+        res.status(400).json({ message: "Introduce e-mail, username y contraseña." })
         return
     }
+    const { role, username, email, password } = req.body
+    if (password.length < 2) {
+        res.status(400).json({ message: 'La contraseña debe tener al menos 3 carácteres' })
+        return
+    }
+
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+    // if (!emailRegex.test(email)) {
+    //     res.status(400).json({ message: 'Introduce un correo electrónico válido.' })
+    //     return
+    // }
+
     User
         .findOne({ email })
         .then((foundUser) => {
