@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const User = require('./../models/User.model')
 const mongoose = require('mongoose')
+const { isAuthenticated } = require("../middlewares/jwt.middleware")
+
 
 
 //Todos los usuarios
@@ -32,7 +34,7 @@ router.get("/student/:id", (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-router.post("/student/edit/:id", (req, res, next) => {
+router.post("/student/edit/:id", isAuthenticated, (req, res, next) => {
 
     const { id } = req.params
     const { username, email, password, profileImg, interests, education, aboutMe, courses } = req.body
@@ -45,7 +47,7 @@ router.post("/student/edit/:id", (req, res, next) => {
 })
 
 
-router.post('/student/delete/:id', (req, res, next) => {
+router.post('/student/delete/:id', isAuthenticated, (req, res, next) => {
 
     const { id } = req.params
 
@@ -60,7 +62,7 @@ router.post('/student/delete/:id', (req, res, next) => {
 
 
 //CRUD TEACHER
-router.get("/teacher", (req, res) => {
+router.get("/teacher", (req, res, next) => {
 
     User
         .find({ role: 'TEACHER' })
@@ -78,7 +80,7 @@ router.get("/teacher/:id", (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-router.post("/teacher/edit/:id", (req, res, next) => {
+router.post("/teacher/edit/:id", isAuthenticated, (req, res, next) => {
 
     const { id } = req.params
     const { username, email, password, profileImg, interests, education, aboutMe, courses } = req.body
@@ -91,7 +93,7 @@ router.post("/teacher/edit/:id", (req, res, next) => {
 })
 
 
-router.post('/teacher/delete/:id', (req, res, next) => {
+router.post('/teacher/delete/:id', isAuthenticated, (req, res, next) => {
 
     const { id } = req.params
 
