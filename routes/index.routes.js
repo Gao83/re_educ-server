@@ -7,7 +7,7 @@ router.get("/", (req, res, next) => {
 
 router.use("/auth", require('./auth.routes'))
 router.use('/courses', require('./course.routes'))
-router.use('/profile', require('./profile.routes'))
+router.use('/profile', require('./user.routes'))
 router.use('/rating', require('./rating.routes'))
 router.use('/response', require('./response.routes'))
 

@@ -3,6 +3,8 @@ const Course = require('../models/Course.model')
 const Rating = require('../models/Rating.model')
 const mongoose = require('mongoose')
 const { formatError } = require('../utils/mongoose-error')
+const { isPaided } = require('../middlewares/isPaid.middleware')
+
 
 router.post('/create', (req, res, next) => {
     const { title, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls } = req.body
@@ -10,7 +12,7 @@ router.post('/create', (req, res, next) => {
         .findOne({ title })
         .then(findCourse => {
             if (findCourse) {
-                res.status(400).json({ message: 'The course is already exist' })
+                res.status(400).json({ message: 'Este curso ya existe' })
                 return
             }
             return Course.create({ title, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls })
@@ -55,29 +57,6 @@ router.get('/getAllCourses', (req, res, next) => {
 
 
 
-
-router.delete('/:id/delete-user', (req, res) => {
-
-    const { id } = req.params
-
-    User
-        .find({ friends: id })
-        .then(users => {
-            let promiseArr = users.map(user => User.findByIdAndUpdate(user._id, { $pull: { friends: id } }, { new: true }))
-            return Promise.all(promiseArr)
-        })
-        .then(() => User.findByIdAndDelete(id, { new: true }))
-        .then(response => res.json(response))
-        .catch(err => res.status(500).json(err))
-})
-
-
-
-
-
-
-
-
 router.post('/edit/:id', (req, res, next) => {
 
     const { id } = req.params
@@ -94,7 +73,6 @@ router.post('/edit/:id', (req, res, next) => {
 })
 
 
-
 router.post('/delete/:id', (req, res, next) => {
 
     const { id } = req.params
@@ -102,7 +80,7 @@ router.post('/delete/:id', (req, res, next) => {
     Course
         .findByIdAndDelete(id)
         .then(() => {
-            res.json({ message: 'has borrado un curso' })
+            res.json({ message: 'Has borrado un curso' })
         })
         .catch(err => res.status(500).json(err))
 })
