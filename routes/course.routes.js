@@ -23,24 +23,60 @@ router.post('/create', (req, res, next) => {
         })
 })
 
+// router.get('/getAllCourses', (req, res, next) => {
+//     Course
+//         .find()
+//         .then(allCourses => {
+//             res.status(201).json(allCourses)
+//         })
+//         .catch(err => err)
+// })
+
 router.get('/getAllCourses', (req, res, next) => {
-    Course
+
+    const promiseRating = Rating.find()
+    const promiseCourse = Course.find()
+    Rating
         .find()
-        .then(allCourses => {
-            res.status(201).json(allCourses)
+        .then(allRatings => {
+            let idRatingsCourse = allRatings.map(rating => rating.rating)
+
+            res.json(idRatingsCourse)
+            //return Promise.all(idRatingsCourse)
+
         })
-        .catch(err => err)
+    // .then(allCourses => {
+    //     res.json(allCourses)
+    // })
+
+    // return Promise.all(promiseAllRatings)
+
 })
 
-router.get('/getOneCourse/:id', (req, res, next) => {
+
+
+
+router.delete('/:id/delete-user', (req, res) => {
+
     const { id } = req.params
-    Course
-        .findById(id)
-        .then(oneCourse => {
-            res.status(201).json(oneCourse)
+
+    User
+        .find({ friends: id })
+        .then(users => {
+            let promiseArr = users.map(user => User.findByIdAndUpdate(user._id, { $pull: { friends: id } }, { new: true }))
+            return Promise.all(promiseArr)
         })
-        .catch(err => err)
+        .then(() => User.findByIdAndDelete(id, { new: true }))
+        .then(response => res.json(response))
+        .catch(err => res.status(500).json(err))
 })
+
+
+
+
+
+
+
 
 router.post('/edit/:id', (req, res, next) => {
 
@@ -91,37 +127,30 @@ router.get('/filter-courses/:search', (req, res, next) => {
 })
 
 
-router.get('/:course/rating', (req, res, next) => {
-    const { course } = req.params
-    const promiseCourseAndRating = [
-        Rating
-            .find({ course: course }),
-        Course
-            .find()
-    ]
+router.get('/getOneCourse/:id', (req, res, next) => {
 
+    const { id } = req.params
+
+    const promiseRating = Rating.find({ course: id })
+    const promiseCourse = Course.findById(id)
 
     Promise
-        .all(promiseCourseAndRating)
-        .then(([allRating, allCourses]) => {
-            res.json([allRating, allCourses])
+        .all([promiseRating, promiseCourse])
+        .then(([allRating, oneCourse]) => {
+            let valueRating = allRating.map(item => item.rating)
+            let sum = 0
+            valueRating.forEach(item => item != null ? sum += item : 0)
+
+            let result = sum / allRating.length
+            let finalRating = result.toFixed(1)
+            let finalCourse = { ...oneCourse._doc, finalRating }
+            finalCourse.isPaid ? res.status(401).json({ message: 'No estás autorizado/a' }) : res.status(201).json(finalCourse)
+
         }
         )
-
-
-
-
-
-
+        .catch(err => res.status(500).json(err))
 })
 
-// router.get('/filter-paid/courses?isPaid', (req, res, next) => {
-//     const { isPaid } = req.query
-//     Course
-//         .find({ isPaid: isPaid })
-//         .then(filteredCourses => res.json(filteredCourses))
-//         .catch(err => res.status(500).json(err))
-// })
 
 
 module.exports = router
