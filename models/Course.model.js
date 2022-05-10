@@ -31,7 +31,7 @@ const CourseSchema = new Schema(
             type: String,
             required: [true, 'Indica la duración del curso'],
         },
-        isPaid: {
+        isPaid: {                             
             type: Boolean,
             default: false,
         },

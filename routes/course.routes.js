@@ -3,6 +3,8 @@ const Course = require('../models/Course.model')
 const Rating = require('../models/Rating.model')
 const mongoose = require('mongoose')
 const { formatError } = require('../utils/mongoose-error')
+const { isPaided } = require('../middlewares/isPaid.middleware')
+
 
 router.post('/create', (req, res, next) => {
     const { title, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls } = req.body
@@ -10,7 +12,7 @@ router.post('/create', (req, res, next) => {
         .findOne({ title })
         .then(findCourse => {
             if (findCourse) {
-                res.status(400).json({ message: 'The course is already exist' })
+                res.status(400).json({ message: 'Este curso ya existe' })
                 return
             }
             return Course.create({ title, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls })
@@ -23,25 +25,37 @@ router.post('/create', (req, res, next) => {
         })
 })
 
+// router.get('/getAllCourses', (req, res, next) => {
+//     Course
+//         .find()
+//         .then(allCourses => {
+//             res.status(201).json(allCourses)
+//         })
+//         .catch(err => err)
+// })
+
 router.get('/getAllCourses', (req, res, next) => {
-    Course
+
+    const promiseRating = Rating.find()
+    const promiseCourse = Course.find()
+    Rating
         .find()
-        .select()
-        .then(allCourses => {
-            res.status(201).json(allCourses)
+        .then(allRatings => {
+            let idRatingsCourse = allRatings.map(rating => rating.rating)
+
+            res.json(idRatingsCourse)
+            //return Promise.all(idRatingsCourse)
+
         })
-        .catch(err => next(err))
+    // .then(allCourses => {
+    //     res.json(allCourses)
+    // })
+
+    // return Promise.all(promiseAllRatings)
+
 })
 
-router.get('/getOneCourse/:id', (req, res, next) => {
-    const { id } = req.params
-    Course
-        .findById(id)
-        .then(oneCourse => {
-            res.status(201).json(oneCourse)
-        })
-        .catch(err => next(err))
-})
+
 
 router.post('/edit/:id', (req, res, next) => {
 
@@ -59,14 +73,14 @@ router.post('/edit/:id', (req, res, next) => {
 })
 
 
-router.post('/delete/:id', (req, res) => {
+router.post('/delete/:id', (req, res, next) => {
 
     const { id } = req.params
 
     Course
         .findByIdAndDelete(id)
         .then(() => {
-            res.json({ message: 'has borrado un curso' })
+            res.json({ message: 'Has borrado un curso' })
         })
         .catch(err => res.status(500).json(err))
 })
@@ -91,30 +105,30 @@ router.get('/filter-courses/:search', (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-router.get('/:course/rating', (req, res) => {
-    const { course } = req.params
-    const promiseCourseAndRating = [
-        Rating
-            .find({ course: course }),
-        Course
-            .find()
-    ]
+
+router.get('/getOneCourse/:id', (req, res, next) => {
+
+    const { id } = req.params
+
+    const promiseRating = Rating.find({ course: id })
+    const promiseCourse = Course.findById(id)
 
     Promise
-        .all(promiseCourseAndRating)
-        .then(([allRating, allCourses]) => {
-            res.json([allRating, allCourses])
+        .all([promiseRating, promiseCourse])
+        .then(([allRating, oneCourse]) => {
+            let valueRating = allRating.map(item => item.rating)
+            let sum = 0
+            valueRating.forEach(item => item != null ? sum += item : 0)
+
+            let result = sum / allRating.length
+            let finalRating = result.toFixed(1)
+            let finalCourse = { ...oneCourse._doc, finalRating }
+            finalCourse.isPaid ? res.status(401).json({ message: 'No estás autorizado/a' }) : res.status(201).json(finalCourse)
+
         }
         )
-
+        .catch(err => res.status(500).json(err))
 })
 
-// router.get('/filter-paid/courses?isPaid', (req, res, next) => {
-//     const { isPaid } = req.query
-//     Course
-//         .find({ isPaid: isPaid })
-//         .then(filteredCourses => res.json(filteredCourses))
-//         .catch(err => res.status(500).json(err))
-// })
 
 module.exports = router
