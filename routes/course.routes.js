@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Course = require('../models/Course.model')
+const Rating = require('../models/Rating.model')
 const mongoose = require('mongoose')
 const { formatError } = require('../utils/mongoose-error')
 
@@ -87,6 +88,31 @@ router.get('/filter-courses/:search', (req, res, next) => {
         .find({ 'title': { "$regex": search, "$options": "i" } })
         .then(filteredCourses => res.json(filteredCourses))
         .catch(err => res.status(500).json(err))
+})
+
+
+router.get('/:course/rating', (req, res, next) => {
+    const { course } = req.params
+    const promiseCourseAndRating = [
+        Rating
+            .find({ course: course }),
+        Course
+            .find()
+    ]
+
+
+    Promise
+        .all(promiseCourseAndRating)
+        .then(([allRating, allCourses]) => {
+            res.json([allRating, allCourses])
+        }
+        )
+
+
+
+
+
+
 })
 
 // router.get('/filter-paid/courses?isPaid', (req, res, next) => {
