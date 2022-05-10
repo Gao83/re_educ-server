@@ -4,16 +4,14 @@ const mongoose = require('mongoose')
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
 
 
-
-//Todos los usuarios
-router.get("/list", (req, res,  next) => {
+//ALL USERS
+router.get("/list", (req, res, next) => {
 
     User
         .find()
         .then(response => res.json(response))
         .catch(err => res.status(500).json(err))
 })
-
 
 //CRUD STUDENT
 router.get("/student", (req, res, next) => {
@@ -24,7 +22,7 @@ router.get("/student", (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-router.get("/student/:id", (req, res, next) => {
+router.get("/student/:id", (req, res) => {
 
     const { id } = req.params
 
@@ -34,11 +32,11 @@ router.get("/student/:id", (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-router.post("/student/edit/:id", isAuthenticated, (req, res, next) => {
+router.post("/student/edit/:id", isAuthenticated, (req, res) => {
 
     const { id } = req.params
-    const { username, email, password, profileImg, interests, education, aboutMe, courses } = req.body
-    const studentInfo = { username, email, password, profileImg, interests, education, aboutMe, courses }
+    const studentInfo = { username, email, password, profileImg, interests, education, aboutMe, courses } = req.body
+    // const studentInfo = { username, email, password, profileImg, interests, education, aboutMe, courses }
 
     User
         .findByIdAndUpdate(id, { studentInfo })
@@ -46,8 +44,7 @@ router.post("/student/edit/:id", isAuthenticated, (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-
-router.post('/student/delete/:id', isAuthenticated, (req, res, next) => {
+router.post('/student/delete/:id', isAuthenticated, (req, res) => {
 
     const { id } = req.params
 
@@ -59,10 +56,8 @@ router.post('/student/delete/:id', isAuthenticated, (req, res, next) => {
         .catch(err => console.log(err))
 })
 
-
-
 //CRUD TEACHER
-router.get("/teacher", (req, res, next) => {
+router.get("/teacher", (req, res) => {
 
     User
         .find({ role: 'TEACHER' })
@@ -70,7 +65,7 @@ router.get("/teacher", (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-router.get("/teacher/:id", (req, res, next) => {
+router.get("/teacher/:id", (req, res) => {
 
     const { id } = req.params
 
@@ -80,7 +75,7 @@ router.get("/teacher/:id", (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-router.post("/teacher/edit/:id", isAuthenticated, (req, res, next) => {
+router.post("/teacher/edit/:id", isAuthenticated, (req, res) => {
 
     const { id } = req.params
     const { username, email, password, profileImg, interests, education, aboutMe, courses } = req.body
@@ -92,18 +87,16 @@ router.post("/teacher/edit/:id", isAuthenticated, (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-
 router.post('/teacher/delete/:id', isAuthenticated, (req, res, next) => {
 
     const { id } = req.params
 
     User
-        .findByIdAndDelete( id )
+        .findByIdAndDelete(id)
         .then(() => {
             res.status(201).json('Teacher deleted')
         })
-        .catch(err => console.log(err))
+        .catch(err => next(err))
 })
-
 
 module.exports = router

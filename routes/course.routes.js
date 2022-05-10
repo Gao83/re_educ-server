@@ -26,10 +26,11 @@ router.post('/create', (req, res, next) => {
 router.get('/getAllCourses', (req, res, next) => {
     Course
         .find()
+        .select()
         .then(allCourses => {
             res.status(201).json(allCourses)
         })
-        .catch(err => err)
+        .catch(err => next(err))
 })
 
 router.get('/getOneCourse/:id', (req, res, next) => {
@@ -39,7 +40,7 @@ router.get('/getOneCourse/:id', (req, res, next) => {
         .then(oneCourse => {
             res.status(201).json(oneCourse)
         })
-        .catch(err => err)
+        .catch(err => next(err))
 })
 
 router.post('/edit/:id', (req, res, next) => {
@@ -58,8 +59,7 @@ router.post('/edit/:id', (req, res, next) => {
 })
 
 
-
-router.post('/delete/:id', (req, res, next) => {
+router.post('/delete/:id', (req, res) => {
 
     const { id } = req.params
 
@@ -71,11 +71,12 @@ router.post('/delete/:id', (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
+router.get('/filter/:category', (req, res) => {
 
-router.get('/filter/:category', (req, res, next) => {
     const { category } = req.params
+
     Course
-        .find({ category: category })
+        .find({ category })
         .then(categoryGroups => {
             res.status(201).json(categoryGroups)
         })
@@ -90,8 +91,7 @@ router.get('/filter-courses/:search', (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
-
-router.get('/:course/rating', (req, res, next) => {
+router.get('/:course/rating', (req, res) => {
     const { course } = req.params
     const promiseCourseAndRating = [
         Rating
@@ -100,18 +100,12 @@ router.get('/:course/rating', (req, res, next) => {
             .find()
     ]
 
-
     Promise
         .all(promiseCourseAndRating)
         .then(([allRating, allCourses]) => {
             res.json([allRating, allCourses])
         }
         )
-
-
-
-
-
 
 })
 
@@ -122,6 +116,5 @@ router.get('/:course/rating', (req, res, next) => {
 //         .then(filteredCourses => res.json(filteredCourses))
 //         .catch(err => res.status(500).json(err))
 // })
-
 
 module.exports = router

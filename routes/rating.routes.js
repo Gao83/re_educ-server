@@ -3,13 +3,12 @@ const Rating = require('./../models/Rating.model')
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
 
 
-// COMENTARIO EN EL CURSO
+// USER COMMENT
 router.post('/course/:course/create-comment', isAuthenticated, (req, res) => {
 
     const { image, content, rating } = req.body
     const currentUser = req.payload._id
     
-    console.log('----------------------', currentUser)
     const { course } = req.params
 
     Rating
@@ -20,12 +19,12 @@ router.post('/course/:course/create-comment', isAuthenticated, (req, res) => {
         .catch(err => res.status(500).json(err))
 })
 
-// COMENTARIO EN EL PERFIL DEL PROFESOR
+// TEACHER COMMENT
 router.post('/teacher/:teacher/create-comment', isAuthenticated, (req, res) => {
 
     const { image, content, rating } = req.body
     const currentUser = req.payload._id
-    console.log('----------------------', currentUser)
+
     const { teacher } = req.params
 
     Rating

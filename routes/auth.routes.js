@@ -5,7 +5,7 @@ const User = require("../models/User.model")
 const saltRounds = 10
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
 
-router.post('/register', (req, res, next) => {
+router.post('/register', (req, res) => {
 
     if (email === '' || password === '' || username === '') {
         res.status(400).json({ message: "Introduce e-mail, username y contraseña." })
@@ -45,7 +45,7 @@ router.post('/register', (req, res, next) => {
         })
 })
 
-router.post('/login', (req, res, next) => {
+router.post('/login', (req, res) => {
 
     const {_id, email, password, role } = req.body
     if (email === '' || password === '') {
