@@ -5,29 +5,25 @@ const User = require("../models/User.model")
 const saltRounds = 10
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
 
+//RUTAS TESTEADAS Y FUNCIONAN
+
 router.post('/register', (req, res, next) => {
 
+    const { role, username, email, password } = req.body
     if (email === '' || password === '' || username === '') {
         res.status(400).json({ message: "Introduce e-mail, username y contraseña." })
         return
     }
-    const { role, username, email, password } = req.body
     if (password.length < 2) {
         res.status(400).json({ message: 'La contraseña debe tener al menos 3 carácteres' })
         return
     }
 
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
-    // if (!emailRegex.test(email)) {
-    //     res.status(400).json({ message: 'Introduce un correo electrónico válido.' })
-    //     return
-    // }
-
     User
         .findOne({ email })
         .then((foundUser) => {
             if (foundUser) {
-                res.status(400).json({ message: "User already exists." })
+                res.status(400).json({ message: "Este usuario/a ya existe." })
                 return
             }
             const salt = bcrypt.genSaltSync(saltRounds)
@@ -47,22 +43,22 @@ router.post('/register', (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
 
-    const {_id, email, password, role } = req.body
+    const { _id, email, password, role } = req.body
     if (email === '' || password === '') {
-        res.status(400).json({ message: "Indica email y contraseña." });
+        res.status(400).json({ message: "Indica tu email y contraseña." });
         return;
     }
     User
         .findOne({ email })
         .then((foundUser) => {
             if (!foundUser) {
-                res.status(401).json({ message: "Usuario no encontrado" })
+                res.status(401).json({ message: "Usuario/a no encontrado/a" })
                 return;
             }
             if (bcrypt.compareSync(password, foundUser.password)) {
                 const { email, username, _id, role } = foundUser
 
-                const payload = {_id, email, username, role }
+                const payload = { _id, email, username, role }
 
                 const authToken = jwt.sign(
                     payload,
