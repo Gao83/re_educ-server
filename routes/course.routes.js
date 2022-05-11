@@ -25,37 +25,28 @@ router.post('/create', (req, res, next) => {
         })
 })
 
-// router.get('/getAllCourses', (req, res, next) => {
-//     Course
-//         .find()
-//         .then(allCourses => {
-//             res.status(201).json(allCourses)
-//         })
-//         .catch(err => err)
-// })
-
 router.get('/getAllCourses', (req, res, next) => {
 
     const promiseRating = Rating.find()
     const promiseCourse = Course.find()
-    Rating
-        .find()
-        .then(allRatings => {
-            let idRatingsCourse = allRatings.map(rating => rating.rating)
 
-            res.json(idRatingsCourse)
-            //return Promise.all(idRatingsCourse)
+    Promise
+        .all([promiseCourse, promiseRating])
+        .then(([courses, ratings]) => {
 
+            const ratedCourses = courses.map(eachCourse => {
+
+                const relatedRatings = ratings.filter(rat => rat.course == eachCourse._id.toString())
+                const finalAvg = relatedRatings.reduce((acc, val) => val.rating != null ? acc + val.rating : 0, 1)
+                const resultFinal = finalAvg / relatedRatings.length
+                return {
+                    ...eachCourse._doc, avgRating: resultFinal.toFixed(2)
+                }
+            })
+            res.json(ratedCourses)
         })
-    // .then(allCourses => {
-    //     res.json(allCourses)
-    // })
-
-    // return Promise.all(promiseAllRatings)
-
+        .catch(err => res.status(500).json(err))
 })
-
-
 
 router.post('/edit/:id', (req, res, next) => {
 
@@ -119,12 +110,11 @@ router.get('/getOneCourse/:id', (req, res, next) => {
             let valueRating = allRating.map(item => item.rating)
             let sum = 0
             valueRating.forEach(item => item != null ? sum += item : 0)
-
             let result = sum / allRating.length
             let finalRating = result.toFixed(1)
             let finalCourse = { ...oneCourse._doc, finalRating }
-            finalCourse.isPaid ? res.status(401).json({ message: 'No estás autorizado/a' }) : res.status(201).json(finalCourse)
-
+            // finalCourse.isPaid ? res.status(401).json({ message: 'No estás autorizado/a' }) :
+                res.status(201).json(finalCourse)
         }
         )
         .catch(err => res.status(500).json(err))
