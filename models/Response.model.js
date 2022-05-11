@@ -11,6 +11,10 @@ const responseSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
+        // comment: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'Rating'
+        // },
     },
     {
         timestamps: true,
