@@ -52,7 +52,7 @@ const CourseSchema = new Schema(
         category: {
             type: String,
             required: [true, 'Indica una categoria'],
-            enum: ["tecnologia", "diseno", "marketing", "informatica y software", "musica", "salud y fitness", "otros"]
+            enum: ["tecnologia", "diseno", "marketing", "informatica-y-software", "musica", "salud-y-fitness", "otros"]
         },
         urls: [String],
         payment: {
