@@ -36,7 +36,7 @@ router.get("/teacher", (req, res, next) => {
 
 
 //USER DETAILS
-router.get("/:id", (req, res, next) => {
+router.get("/details/:id", (req, res, next) => {
 
     const { id } = req.params
 
