@@ -43,7 +43,7 @@ router.post('/register', (req, res, next) => {
 
 router.post('/login', (req, res) => {
 
-    const { _id, email, password, role } = req.body
+    const { _id, email, password, role, interests, education, profileImg, aboutMe, courses} = req.body
     if (email === '' || password === '') {
         res.status(400).json({ message: "Indica tu email y contraseña." });
         return;
@@ -56,7 +56,7 @@ router.post('/login', (req, res) => {
                 return;
             }
             if (bcrypt.compareSync(password, foundUser.password)) {
-                const { email, username, _id, role } = foundUser
+                const { email, username, _id, role, interests, education, profileImg, aboutMe, courses } = foundUser
 
                 const payload = { _id, email, username, role }
 
