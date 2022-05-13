@@ -27,7 +27,9 @@ const userSchema = new Schema(
       default: 'https://happytravel.viajes/wp-content/uploads/2020/04/146-1468479_my-profile-icon-blank-profile-picture-circle-hd-600x475.png'
     },
     interests: {
-      type: [String]
+      type: String,
+      enum: ["Lenguajes de programación", "Diseño de interfaces", "Fundamentos de marketing", "Criptomonedas y Blockchain", "Salud Mental", "Deportes", "Otros"]
+
     },
     education: {
       type: String,

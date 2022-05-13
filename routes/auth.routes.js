@@ -9,7 +9,7 @@ const { isAuthenticated } = require("../middlewares/jwt.middleware")
 
 router.post('/register', (req, res, next) => {
 
-    const { role, username, email, password } = req.body
+    const { role, username, email, password, profileImg, interests, education, aboutMe, courses } = req.body
     if (email === '' || password === '' || username === '') {
         res.status(400).json({ message: "Introduce e-mail, username y contraseña." })
         return
@@ -31,8 +31,8 @@ router.post('/register', (req, res, next) => {
             return User.create({ role, username, email, password: hashedPassword })
         })
         .then((createdUser) => {
-            const { role, username, email, password } = createdUser
-            const user = { role, username, email, password }
+            const { role, username, email, password, profileImg, interests, education, aboutMe, courses } = createdUser
+            const user = { role, username, email, password, profileImg, interests, education, aboutMe, courses }
             res.status(201).json({ user })
         })
         .catch(err => {
