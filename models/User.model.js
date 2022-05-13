@@ -28,18 +28,24 @@ const userSchema = new Schema(
     },
     interests: {
       type: String,
-      enum: ["Lenguajes de programación", "Diseño de interfaces", "Fundamentos de marketing", "Criptomonedas y Blockchain", "Salud Mental", "Deportes", "Otros"]
+      enum: ["Lenguajes de programación", "Diseño de interfaces", "Fundamentos de marketing", "Criptomonedas y Blockchain", "Salud Mental", "Deportes", "Otros"],
+      default: "Otros"
 
     },
     education: {
       type: String,
-      enum: ["Bachillerato", "Formación Profesional", "Grado Universitario", "Enseñanzas de régimen especial", "Otros"]
+      enum: ["Bachillerato", "Formación Profesional", "Grado Universitario", "Enseñanzas de régimen especial", "Otros"],
+      default: "Otros"
     },
-    aboutMe: String,
+    aboutMe: {
+      type: String,
+      default: ''
+    },
     courses: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Course'
+        ref: 'Course',
+        default: ''
       }
     ],
   },
