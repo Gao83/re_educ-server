@@ -50,10 +50,10 @@ router.get("/details/:id", (req, res, next) => {
 router.post("/edit/:id", isAuthenticated, (req, res, next) => {
 
     const { id } = req.params
-    const userInfo = { username, email, password, profileImg, interests, education, aboutMe, courses } = req.body
+    const userInfo = { profileImg, interests, education, aboutMe } = req.body
 
     User
-        .findByIdAndUpdate(id, userInfo )
+        .findByIdAndUpdate(id, userInfo)
         .then(editedUser => res.json(editedUser))
         .catch(err => res.status(500).json(err))
 })
