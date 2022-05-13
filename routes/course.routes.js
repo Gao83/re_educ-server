@@ -1,13 +1,17 @@
 const router = require('express').Router()
 const Course = require('../models/Course.model')
 const Rating = require('../models/Rating.model')
+const User = require("../models/User.model")
 const mongoose = require('mongoose')
 const { formatError } = require('../utils/mongoose-error')
-const { isPaided } = require('../middlewares/isPaid.middleware')
+const { isAuthenticated } = require("../middlewares/jwt.middleware")
 
 
-router.post('/create', (req, res, next) => {
+router.post('/create', isAuthenticated, (req, res, next) => {
+    const currentUser = req.payload._id
+
     const { title, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls } = req.body
+
     Course
         .findOne({ title })
         .then(findCourse => {
@@ -15,7 +19,7 @@ router.post('/create', (req, res, next) => {
                 res.status(400).json({ message: 'Este curso ya existe' })
                 return
             }
-            return Course.create({ title, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls })
+            return Course.create({ title, owner: currentUser, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls })
         })
         .then(newCourse => {
             res.status(201).json(newCourse)
@@ -89,7 +93,9 @@ router.get('/filter/:category', (req, res) => {
 })
 
 router.get('/filter-courses/:search', (req, res, next) => {
+
     const { search } = req.params
+
     Course
         .find({ 'title': { "$regex": search, "$options": "i" } })
         .then(filteredCourses => res.json(filteredCourses))
@@ -100,21 +106,19 @@ router.get('/filter-courses/:search', (req, res, next) => {
 router.get('/getOneCourse/:id', (req, res, next) => {
 
     const { id } = req.params
-
     const promiseRating = Rating.find({ course: id })
-    const promiseCourse = Course.findById(id)
-
+    const promiseCourse = Course.findById(id).populate('owner')
     Promise
         .all([promiseRating, promiseCourse])
-        .then(([allRating, oneCourse]) => {
+        .then(([allRating, oneCourse,]) => {
             let valueRating = allRating.map(item => item.rating)
             let sum = 0
             valueRating.forEach(item => item != null ? sum += item : 0)
             let result = sum / allRating.length
-            let finalRating = result.toFixed(1)
-            let finalCourse = { ...oneCourse._doc, finalRating }
+            let avgRating = result.toFixed(1)
+            let finalCourse = { ...oneCourse._doc, avgRating }
             // finalCourse.isPaid ? res.status(401).json({ message: 'No estás autorizado/a' }) :
-                res.status(201).json(finalCourse)
+            res.status(201).json(finalCourse)
         }
         )
         .catch(err => res.status(500).json(err))

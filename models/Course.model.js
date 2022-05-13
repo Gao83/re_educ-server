@@ -7,6 +7,10 @@ const CourseSchema = new Schema(
             required: [true, 'Indica el nombre del curso'],
             unique: [true, 'El nombre del curso ya existe'],
         },
+        owner: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
         courseImg: {
             type: String,
             default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLEoaTsWQuPn6bW-_n6hqZvmy5Lh64qwETLg&usqp=CAU'
@@ -31,7 +35,7 @@ const CourseSchema = new Schema(
             type: String,
             required: [true, 'Indica la duración del curso'],
         },
-        isPaid: {                             
+        isPaid: {
             type: Boolean,
             default: false,
         },
