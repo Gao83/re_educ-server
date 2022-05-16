@@ -37,7 +37,7 @@
 
 ## Details of each course
 
-| METHOD |        URL       |                 DESCRIPT
+| METHOD |        URL       |                 DESCRIPT|
 
 ## Create each course
 
