@@ -11,7 +11,7 @@ const { ratingCourses } = require('../utils/pushRatingListCourse')
 router.post('/create', isAuthenticated, (req, res, next) => {
 
     const currentUser = req.payload._id
-    const { title, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls } = req.body
+    const { title, courseImg, courseVideo,  headline, description, requirements, content, duration, isPaid, price, category, urls } = req.body
 
     Course
         .findOne({ title })
@@ -20,7 +20,7 @@ router.post('/create', isAuthenticated, (req, res, next) => {
                 res.status(400).json({ message: 'Este curso ya existe' })
                 return
             }
-            return Course.create({ title, owner: currentUser, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls })
+            return Course.create({ title, owner: currentUser, courseImg, courseVideo, headline, description, requirements, content, duration, isPaid, price, category, urls })
         })
         .then(newCourse => {
             res.status(201).json(newCourse)

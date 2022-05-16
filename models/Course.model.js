@@ -15,6 +15,10 @@ const CourseSchema = new Schema(
             type: String,
             default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLEoaTsWQuPn6bW-_n6hqZvmy5Lh64qwETLg&usqp=CAU'
         },
+        courseVideo: {
+            type: String,
+            default: 'https://videopromotion.club/assets/images/default-video-thumbnail.jpg'
+        },
         headline: {
             type: String,
             required: [true, 'Indica un titular molón para tu curso'],
