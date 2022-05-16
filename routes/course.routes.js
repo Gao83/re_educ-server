@@ -5,11 +5,12 @@ const User = require("../models/User.model")
 const mongoose = require('mongoose')
 const { formatError } = require('../utils/mongoose-error')
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
+const { ratingCourses } = require('../utils/pushRatingListCourse')
 
 
 router.post('/create', isAuthenticated, (req, res, next) => {
-    const currentUser = req.payload._id
 
+    const currentUser = req.payload._id
     const { title, courseImg, headline, description, requirements, content, duration, isPaid, price, category, urls } = req.body
 
     Course
@@ -38,20 +39,32 @@ router.get('/getAllCourses', (req, res, next) => {
         .all([promiseCourse, promiseRating])
         .then(([courses, ratings]) => {
 
-            const ratedCourses = courses.map(eachCourse => {
-
-                const relatedRatings = ratings.filter(rat => rat.course == eachCourse._id.toString())
-                const finalAvg = relatedRatings.reduce((acc, val) => val.rating != null ? acc + val.rating : 0, 1)
-                const resultFinal = finalAvg / relatedRatings.length
-                return {
-                    ...eachCourse._doc, avgRating: resultFinal.toFixed(2)
-                }
-            })
-            res.json(ratedCourses)
+            res.json(ratingCourses(courses, ratings))
         })
         .catch(err => res.status(500).json(err))
 })
 
+
+router.get('/coursesOrderedByRating', (req, res, next) => {
+
+    const promiseRating = Rating.find()
+    const promiseCourse = Course.find()
+
+    Promise
+        .all([promiseCourse, promiseRating])
+        .then(([courses, ratings]) => {
+
+            const allCourses = ratingCourses(courses, ratings)
+            const coursesOrdByRating = allCourses.sort((a, b) => {
+
+                return b.avgRating - a.avgRating
+            })
+
+            res.json(coursesOrdByRating)
+
+        })
+        .catch(err => res.status(500).json(err))
+})
 router.post('/edit/:id', (req, res, next) => {
 
     const { id } = req.params

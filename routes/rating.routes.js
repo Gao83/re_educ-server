@@ -7,18 +7,50 @@ const { isAuthenticated } = require("../middlewares/jwt.middleware")
 //ALL COMMENTS FILTERED BY COURSE
 
 router.get("/comments/:course_id", (req, res, next) => {
-    
+
     const { course_id } = req.params
 
     Rating
-        .find({ course: course_id})
+        .find({ course: course_id })
         .populate('owner')
         .then(response => res.json(response))
         .catch(err => res.status(500).json(err))
 })
 
+// USER COMMENT COURSE
+router.post('/course/:course/create-comment', isAuthenticated, (req, res) => {
 
-// USER COMMENT
+    const { image, content, rating } = req.body
+    const currentUser = req.payload._id
+
+    const { course } = req.params
+
+    Rating
+        .create({ owner: currentUser, course, image, content, rating })
+        .then(review => {
+            res.json(review)
+        })
+        .catch(err => res.status(500).json(err))
+})
+
+
+// USER COMMENT TEACHER
+router.post('/teacher/:id/create-comment', isAuthenticated, (req, res) => {
+
+    const { image, content, rating } = req.body
+    const currentUser = req.payload._id
+
+    const { id } = req.params
+
+    Rating
+        .create({ image, content, rating, owner: currentUser, teacher: id })
+        .then(review => {
+            res.json(review)
+        })
+        .catch(err => res.status(500).json(err))
+})
+
+
 router.post('/course/:course/create-comment', isAuthenticated, (req, res) => {
 
     const { image, content, rating } = req.body
@@ -33,6 +65,7 @@ router.post('/course/:course/create-comment', isAuthenticated, (req, res) => {
         })
         .catch(err => res.status(500).json(err))
 })
+
 
 // EDIT  USER COMMENT
 router.post('/course/edit-comment/:id', (req, res, next) => {
