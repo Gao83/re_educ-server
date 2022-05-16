@@ -36,7 +36,7 @@ router.get("/teacher", (req, res, next) => {
 
 
 //USER DETAILS
-router.get("/details/:id", (req, res, next) => {
+router.get("/details/:id", (req, res) => {
 
     const { id } = req.params
 
@@ -47,16 +47,17 @@ router.get("/details/:id", (req, res, next) => {
 })
 
 //EDIT USER
-router.post("/edit/:id", isAuthenticated, (req, res, next) => {
+router.post("/edit/:id", isAuthenticated, (req, res) => {
 
     const { id } = req.params
-    const userInfo = { profileImg, interests, education, aboutMe } = req.body
+    const userInfo = { interests, education, aboutMe, profileImg } = req.body
 
     User
         .findByIdAndUpdate(id, userInfo)
         .then(editedUser => res.json(editedUser))
         .catch(err => res.status(500).json(err))
 })
+
 
 //DELETE USER
 router.post('/delete/:id', isAuthenticated, (req, res, next) => {
