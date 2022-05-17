@@ -9,10 +9,11 @@ const PaymentSchema = new Schema(
         },
         course: {
             type: Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'Course'
         },
-        totalPrice: {
-            type: Number
+        amount: {
+            type: Number,
+            default: 0.0
         },
     },
     {
