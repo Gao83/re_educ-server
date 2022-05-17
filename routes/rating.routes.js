@@ -17,6 +17,19 @@ router.get("/comments/:course_id", (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
+//ALL COMMENTS FILTERED BY TEACHER
+
+router.get("/comments/teacher/:teacher", (req, res, next) => {
+
+    const { teacher } = req.params
+
+    Rating
+        .find({ teacher })
+        .populate('owner')
+        .then(response => res.json(response))
+        .catch(err => res.status(500).json(err))
+})
+
 // USER COMMENT COURSE
 router.post('/course/:course/create-comment', isAuthenticated, (req, res) => {
 
@@ -146,6 +159,10 @@ router.post('/teacher/delete/:id', (req, res, next) => {
         })
         .catch(err => res.status(500).json(err))
 })
+
+
+
+
 
 
 module.exports = router

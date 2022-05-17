@@ -74,6 +74,7 @@ router.post('/delete/:id', isAuthenticated, (req, res, next) => {
 })
 
 
+
 //GET TEACHER BY RATING
 router.get('/getRatingsTeacher/:id', (req, res, next) => {
 
@@ -81,21 +82,20 @@ router.get('/getRatingsTeacher/:id', (req, res, next) => {
     const promiseRating = Rating.find({ teacher: id })
     const promiseUser = User.findById(id)
     Promise
-    .all([promiseRating, promiseUser])
-    .then(([allRating, oneUser,]) => {
-        let valueRating = allRating.map(item => item.rating)
-        let sum = 0
-        valueRating.forEach(item => item != null ? sum += item : 0)
-        let result = sum / allRating.length
-        let avgRating = result.toFixed(1)
-        let ratingTeacher = { ...oneUser._doc, avgRating }
-        console.log('-------------------', ratingTeacher)
+        .all([promiseRating, promiseUser])
+        .then(([allRating, oneUser,]) => {
+            let valueRating = allRating.map(item => item.rating)
+            let sum = 0
+            valueRating.forEach(item => item != null ? sum += item : 0)
+            let result = sum / allRating.length
+            let avgRating = result.toFixed(1)
+            let ratingTeacher = { ...oneUser._doc, avgRating }
+            console.log('-------------------', ratingTeacher)
             // finalCourse.isPaid ? res.status(401).json({ message: 'No estás autorizado/a' }) :
             res.status(201).json(ratingTeacher)
         }
         )
         .catch(err => res.status(500).json(err))
 })
-
 
 module.exports = router

@@ -11,7 +11,7 @@ const { ratingCourses } = require('../utils/pushRatingListCourse')
 router.post('/create', isAuthenticated, (req, res, next) => {
 
     const currentUser = req.payload._id
-    const { title, courseImg, courseVideo,  headline, description, requirements, content, duration, isPaid, price, category, urls } = req.body
+    const { title, courseImg, courseVideo, headline, description, requirements, content, duration, isPaid, price, category, urls } = req.body
 
     Course
         .findOne({ title })
@@ -116,6 +116,19 @@ router.get('/filter-courses/:search', (req, res, next) => {
 })
 
 
+router.get('/getCoursesById/:id', (req, res, next) => {
+
+    const { id } = req.params
+
+    Course
+        .find({ owner: id })
+        .then(courses => res.json(courses))
+        .catch(err => res.status(500).json(err))
+})
+
+
+
+
 router.get('/getOneCourse/:id', (req, res, next) => {
 
     const { id } = req.params
@@ -137,5 +150,19 @@ router.get('/getOneCourse/:id', (req, res, next) => {
         .catch(err => res.status(500).json(err))
 })
 
+
+router.get('/coursesListByUser', isAuthenticated, (req, res, next) => {
+
+    const currentUser = req.payload._id
+    console.log(req.payload._id)
+
+    Course
+        .find({ owner: currentUser })
+        .then(findCourse => {
+            res.json(findCourse)
+        })
+        .catch(err => res.status(500).json(err))
+
+})
 
 module.exports = router
