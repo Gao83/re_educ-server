@@ -116,6 +116,19 @@ router.get('/filter-courses/:search', (req, res, next) => {
 })
 
 
+router.get('/getCoursesById/:id', (req, res, next) => {
+
+    const { id } = req.params
+
+    Course
+        .find({ owner: id })
+        .then(courses => res.json(courses))
+        .catch(err => res.status(500).json(err))
+})
+
+
+
+
 router.get('/getOneCourse/:id', (req, res, next) => {
 
     const { id } = req.params
