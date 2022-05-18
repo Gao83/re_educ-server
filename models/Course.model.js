@@ -45,6 +45,7 @@ const CourseSchema = new Schema(
         },
         price: {
             type: Number,
+            set: v => v * 100,
             default: null
         },
         price_detail: {
