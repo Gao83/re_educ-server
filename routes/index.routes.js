@@ -10,6 +10,6 @@ router.use('/profile', require('./user.routes'))
 router.use('/rating', require('./rating.routes'))
 router.use('/upload', require('./upload.routes'))
 router.use('/response', require('./response.routes'))
-router.use('/cart', require('./cart.routes'))
+router.use('/payment', require('./payment.routes'))
 
 module.exports = router;

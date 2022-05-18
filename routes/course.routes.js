@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const Course = require('../models/Course.model')
 const Rating = require('../models/Rating.model')
-const User = require("../models/User.model")
+const Payment = require("../models/Payment.model")
 const mongoose = require('mongoose')
 const { formatError } = require('../utils/mongoose-error')
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
@@ -154,7 +154,6 @@ router.get('/getOneCourse/:id', (req, res, next) => {
 router.get('/coursesListByUser', isAuthenticated, (req, res, next) => {
 
     const currentUser = req.payload._id
-    console.log(req.payload._id)
 
     Course
         .find({ owner: currentUser })
@@ -164,5 +163,28 @@ router.get('/coursesListByUser', isAuthenticated, (req, res, next) => {
         .catch(err => res.status(500).json(err))
 
 })
+
+router.get('/coursesCurrentUser', (req, res, next) => {
+
+    const currentUser = req.payload._id
+
+    Payment
+        .find({ owner: currentUser })
+        .then(payments => {
+            const coursesCurrentUser = payments.map(payment => {
+                console.log(payments)
+            })
+            res.json()
+        })
+
+    // Course
+    //     .find({})
+    //     .then(findCourse => {
+    //         res.json(findCourse)
+    //     })
+    //     .catch(err => res.status(500).json(err))
+
+})
+
 
 module.exports = router
