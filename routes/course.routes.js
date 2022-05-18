@@ -2,6 +2,7 @@ const router = require('express').Router()
 const Course = require('../models/Course.model')
 const Rating = require('../models/Rating.model')
 const Payment = require("../models/Payment.model")
+const User = require("../models/User.model")
 const mongoose = require('mongoose')
 const { formatError } = require('../utils/mongoose-error')
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
@@ -20,7 +21,7 @@ router.post('/create', isAuthenticated, (req, res, next) => {
                 res.status(400).json({ message: 'Este curso ya existe' })
                 return
             }
-            return Course.create({ title, owner: currentUser, courseImg, courseVideo, headline, description, requirements, content, duration, isPaid, price, category, urls })
+            return Course.create({ title, owner: currentUser, courseImg, courseVideo, headline, description, requirements, content, duration, isPaid, price: price * 100, category, urls })
         })
         .then(newCourse => {
             res.status(201).json(newCourse)
@@ -164,25 +165,26 @@ router.get('/coursesListByUser', isAuthenticated, (req, res, next) => {
 
 })
 
-router.get('/coursesCurrentUser', (req, res, next) => {
+router.get('/coursesCurrentUser', isAuthenticated, (req, res, next) => {
 
     const currentUser = req.payload._id
-
-    Payment
-        .find({ owner: currentUser })
-        .then(payments => {
-            const coursesCurrentUser = payments.map(payment => {
-                console.log(payments)
+    const promisePayment = Payment.find({ owner: currentUser })
+    const promiseCourse = Course.find()
+    Promise
+        .all([promisePayment, promiseCourse])
+        .then(([payments, courses]) => {
+            const filterdCourses = []
+            payments.forEach(eachPayment => {
+                courses.forEach(eachCourse => {
+                    if (eachCourse._id.toString() === eachPayment.course.toString()) {
+                        filterdCourses.push(eachCourse)
+                    }
+                })
             })
-            res.json()
-        })
+            res.json(filterdCourses)
 
-    // Course
-    //     .find({})
-    //     .then(findCourse => {
-    //         res.json(findCourse)
-    //     })
-    //     .catch(err => res.status(500).json(err))
+        })
+        .catch(err => res.status(500).json(err))
 
 })
 
