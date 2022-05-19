@@ -4,7 +4,10 @@ const ratingSchema = new Schema(
     {
         image: String,
         content: String,
-        rating: Number,
+        rating: {
+            type: Number,
+            default: 1
+        },
         likes: Number,
         owner: {
             type: Schema.Types.ObjectId,

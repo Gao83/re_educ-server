@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const { isAuthenticated } = require("../middlewares/jwt.middleware");
 const Rating = require("../models/Rating.model");
 
+
 //RUTAS TESTEADAS Y FUNCIONAN
 
 
@@ -29,9 +30,30 @@ router.get("/student", (req, res, next) => {
 //LIST TEACHER
 router.get("/teacher", (req, res, next) => {
 
-    User
-        .find({ role: 'TEACHER' })
-        .then(allTeachers => res.json(allTeachers))
+    const promiseUser = User.find({ role: 'TEACHER' })
+    const promiseRating = Rating.find()
+
+    Promise
+        .all([promiseUser, promiseRating])
+        .then(([users, ratings]) => {
+
+            const ratedUsers = users.map(eachUser => {
+                const relatedRatings = ratings.filter(rat => rat.teacher == eachUser._id.toString())
+                let sum = 0
+                relatedRatings.forEach(eachRating => {
+                    sum += eachRating.rating
+                })
+                const resultFinal = sum === 0 || relatedRatings.length === 0 ? 1 : sum / relatedRatings.length
+                return {
+                    ...eachUser._doc, avgRating: resultFinal.toFixed(1).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1')
+                }
+            })
+
+
+            res.json(ratedUsers)
+
+
+        })
         .catch(err => res.status(500).json(err))
 })
 
@@ -87,11 +109,13 @@ router.get('/getRatingsTeacher/:id', (req, res, next) => {
             let valueRating = allRating.map(item => item.rating)
             let sum = 0
             valueRating.forEach(item => item != null ? sum += item : 0)
-            let result = sum / allRating.length
-            let avgRating = result.toFixed(1)
+
+            let result = sum === 0 || allRating.length === 0 ? 1 : sum / allRating.length
+
+            let avgRating = result.toFixed(1).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1')
+
             let ratingTeacher = { ...oneUser._doc, avgRating }
-            console.log('-------------------', ratingTeacher)
-            // finalCourse.isPaid ? res.status(401).json({ message: 'No estás autorizado/a' }) :
+
             res.status(201).json(ratingTeacher)
         }
         )

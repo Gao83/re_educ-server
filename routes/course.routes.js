@@ -41,6 +41,7 @@ router.get('/getAllCourses', (req, res, next) => {
         .then(([courses, ratings]) => {
 
             res.json(ratingCourses(courses, ratings))
+
         })
         .catch(err => res.status(500).json(err))
 })
@@ -140,12 +141,19 @@ router.get('/getOneCourse/:id', (req, res, next) => {
         .then(([allRating, oneCourse,]) => {
             let valueRating = allRating.map(item => item.rating)
             let sum = 0
+
             valueRating.forEach(item => item != null ? sum += item : 0)
-            let result = sum / allRating.length
-            let avgRating = result.toFixed(1)
+
+
+            let result = sum === 0 || allRating.length === 0 ? 1 : sum / allRating.length
+
+            let avgRating = result.toFixed(1).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1')
+
             let finalCourse = { ...oneCourse._doc, avgRating }
             // finalCourse.isPaid ? res.status(401).json({ message: 'No estás autorizado/a' }) :
+
             res.status(201).json(finalCourse)
+
         }
         )
         .catch(err => res.status(500).json(err))
@@ -168,11 +176,14 @@ router.get('/coursesListByUser', isAuthenticated, (req, res, next) => {
 router.get('/coursesCurrentUser', isAuthenticated, (req, res, next) => {
 
     const currentUser = req.payload._id
-    const promisePayment = Payment.find({ owner: currentUser })
+    const promisePayment = Payment.find({ user: currentUser })
+
     const promiseCourse = Course.find()
     Promise
         .all([promisePayment, promiseCourse])
         .then(([payments, courses]) => {
+
+
             const filterdCourses = []
             payments.forEach(eachPayment => {
                 courses.forEach(eachCourse => {
@@ -181,8 +192,8 @@ router.get('/coursesCurrentUser', isAuthenticated, (req, res, next) => {
                     }
                 })
             })
-            res.json(filterdCourses)
 
+            res.json(filterdCourses)
         })
         .catch(err => res.status(500).json(err))
 
