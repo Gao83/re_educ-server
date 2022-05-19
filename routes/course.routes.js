@@ -21,7 +21,7 @@ router.post('/create', isAuthenticated, (req, res, next) => {
                 res.status(400).json({ message: 'Este curso ya existe' })
                 return
             }
-            return Course.create({ title, owner: currentUser, courseImg, courseVideo, headline, description, requirements, content, duration, isPaid, price: price * 100, category, urls })
+            return Course.create({ title, owner: currentUser, courseImg, courseVideo, headline, description, requirements, content, duration, isPaid, price, category, urls })
         })
         .then(newCourse => {
             res.status(201).json(newCourse)
