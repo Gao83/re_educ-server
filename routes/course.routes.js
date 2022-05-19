@@ -62,7 +62,7 @@ router.get('/coursesOrderedByRating', (req, res, next) => {
                 return b.avgRating - a.avgRating
             })
 
-            res.json(coursesOrdByRating)
+            res.json(coursesOrdByRating.slice(0, 6))
 
         })
         .catch(err => res.status(500).json(err))
