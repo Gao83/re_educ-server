@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Response = require('./../models/Response.model')
+const Response = require('../models/Notes.model')
 const Rating = require('./../models/Rating.model')
 const { isAuthenticated } = require("../middlewares/jwt.middleware")
 
