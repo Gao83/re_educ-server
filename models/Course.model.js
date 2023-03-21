@@ -61,7 +61,7 @@ const CourseSchema = new Schema(
         },
         urls: [String],
         payment: {
-            type: String,  //no tenemos ni pi
+            type: String, 
         }
 
     },
