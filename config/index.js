@@ -9,7 +9,7 @@ module.exports = (app) => {
   app.use(
     cors({
       credentials: true,
-      origin: process.env.ORIGIN || "https://re-educt.onrender.com/",
+      origin: process.env.ORIGIN || "https://cerulean-biscotti-73793b.netlify.app/",
     })
   );
 
