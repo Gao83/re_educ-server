@@ -12,5 +12,4 @@ router.use('/upload', require('./upload.routes'))
 router.use('/response', require('./response.routes'))
 router.use('/payment', require('./payment.routes'))
 router.use('/notes', require('./notes.routes'))
-router.use('/', require('./pay.routes'))
 module.exports = router;

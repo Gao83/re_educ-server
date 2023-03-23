@@ -21,7 +21,7 @@ const ratingSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
-        responses: [
+        responses: [                                              //¿?No sabemos como hacer esto!!!!!!!!!
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Response'
